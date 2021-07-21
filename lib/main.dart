@@ -17,6 +17,23 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
         accentColor: Colors.amber,
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+          headline6: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+            headline6: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        ),
       ),
       home: MyHomePage(),
     );
@@ -31,10 +48,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   final List<Transaction> _transactions = [
-    Transaction(
+    /*Transaction(
         id: "t1", title: "Scarpe nuove", amount: 49.99, date: DateTime.now()),
-    Transaction(id: "t2", title: "Spesa", amount: 35.75, date: DateTime.now()),
+    Transaction(id: "t2", title: "Spesa", amount: 35.75, date: DateTime.now()),*/
   ];
 
   @override
@@ -45,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => _startAddNewTransaction(context),
             child: Icon(Icons.add)),
         appBar: AppBar(
-          title: Text('Personal expenses'),
+          title: Text('Personal expenses',),
           actions: [
             IconButton(
                 onPressed: () => _startAddNewTransaction(context),
