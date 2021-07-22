@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_personal_expense/widgets/chart.dart';
 import 'package:flutter_personal_expense/widgets/new_transaction.dart';
 import 'package:flutter_personal_expense/widgets/transaction_list.dart';
 
@@ -55,6 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Transaction(id: "t2", title: "Spesa", amount: 35.75, date: DateTime.now()),*/
   ];
 
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tx) =>
+        tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)))
+    ).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,14 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: [
-            Container(
-              width: double.infinity,
-              child: Card(
-                child: Text('Chart'),
-                color: Theme.of(context).primaryColor,
-                elevation: 5.0,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_transactions)
           ],
         ));
