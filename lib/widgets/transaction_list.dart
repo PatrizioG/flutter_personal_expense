@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_personal_expense/models/transaction.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_personal_expense/widgets/transaction_item.dart';
+
 
 class TransactionList extends StatelessWidget {
+
   final List<Transaction> transactions;
-  Function _deleteTransaction;
+  final Function _deleteTransaction;
 
   TransactionList(this.transactions, this._deleteTransaction);
 
@@ -32,33 +34,9 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                        radius: 30,
-                        child: Padding(
-                          padding: EdgeInsets.all(6),
-                          child: FittedBox(
-                            child: Text(
-                                '€ ${transactions[index].amount.toString()}'),
-                          ),
-                        )),
-                    title: Text(transactions[index].title,
-                        style: Theme.of(context).textTheme.headline6
-                        //TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                    subtitle: Text(
-                      DateFormat.yMMMMd().format(transactions[index].date),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      onPressed: () =>
-                          _deleteTransaction(transactions[index].id),
-                    ),
-                  ),
+                return TransactionItem(
+                  transaction: transactions[index],
+                  deleteTransaction: _deleteTransaction,
                 );
               }),
     );

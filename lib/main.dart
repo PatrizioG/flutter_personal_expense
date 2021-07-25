@@ -57,11 +57,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _showChart = false;
-  final List<Transaction> _transactions = [
-    /*Transaction(
-        id: "t1", title: "Scarpe nuove", amount: 49.99, date: DateTime.now()),
-    Transaction(id: "t2", title: "Spesa", amount: 35.75, date: DateTime.now()),*/
-  ];
+  final List<Transaction> _transactions = [];
 
   List<Transaction> get _recentTransactions {
     return _transactions
@@ -104,35 +100,60 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: [
               if (!isLandscape)
-                Container(
-                  height: (screenHeight - appBarHeight - mobileBHeight) * 0.3,
-                  child: Chart(_recentTransactions),
-                ),
-              if (!isLandscape) txWidget70Percent,
+                ..._buildPortraitContent(
+                    chartHeight:
+                        (screenHeight - appBarHeight - mobileBHeight) * 0.3,
+                    txListHeight:
+                        (screenHeight - appBarHeight - mobileBHeight) * 0.7),
               if (isLandscape)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Show chart'),
-                    Switch(
-                        value: _showChart,
-                        onChanged: (val) {
-                          setState(() {
-                            _showChart = val;
-                          });
-                        })
-                  ],
-                ),
-              _showChart
-                  ? Container(
-                      height:
-                          (screenHeight - appBarHeight - mobileBHeight) * 0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  : txWidget70Percent,
+               ..._buildLandscapeContent(
+                   chartHeight: (screenHeight - appBarHeight - mobileBHeight) * 0.7,
+                   txListHeight: (screenHeight - appBarHeight - mobileBHeight) * 0.7)
             ],
           ),
         ));
+  }
+
+  List<Widget> _buildPortraitContent(
+      {required double chartHeight, required double txListHeight}) {
+    return [
+      Container(
+        height: chartHeight,
+        child: Chart(_recentTransactions),
+      ),
+      _buildTxList(height: txListHeight)
+    ];
+  }
+
+  List<Widget> _buildLandscapeContent( {required double chartHeight, required double txListHeight}) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Show chart'),
+          Switch(
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              })
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: chartHeight,
+              child: Chart(_recentTransactions),
+            )
+          : _buildTxList(height: txListHeight),
+    ];
+  }
+
+  Widget _buildTxList({required double height}) {
+    return Container(
+      height: height,
+      child: TransactionList(_transactions, _deleteTransaction),
+    );
   }
 
   void _addNewTransaction(String title, double amount, DateTime chosedDate) {
